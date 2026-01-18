@@ -1,0 +1,13 @@
+/* App Layout */
+main.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  main.main-content {
+    padding: 1rem;
+  }
+}
