@@ -1,12 +1,11 @@
 "use client"
 
 import React, { createContext, useState, useEffect } from "react"
-import type { AuthContextType, User } from "../types/auth"
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined)
+export const AuthContext = createContext(undefined)
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null)
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user")
@@ -19,8 +18,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [])
 
-  const login = async (email: string, password: string): Promise<void> => {
-    const users = JSON.parse(localStorage.getItem("users") || "[]") as User[]
+  const login = async (email, password) => {
+    const users = JSON.parse(localStorage.getItem("users") || "[]")
     const foundUser = users.find((u) => u.email === email && u.password === password)
 
     if (!foundUser) {
@@ -31,15 +30,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem("user", JSON.stringify(foundUser))
   }
 
-  const register = async (email: string, password: string, name: string): Promise<void> => {
-    const users = JSON.parse(localStorage.getItem("users") || "[]") as User[]
+  const register = async (email, password, name) => {
+    const users = JSON.parse(localStorage.getItem("users") || "[]")
     const existingUser = users.find((u) => u.email === email)
 
     if (existingUser) {
       throw new Error("Email already registered")
     }
 
-    const newUser: User = {
+    const newUser = {
       id: crypto.randomUUID(),
       email,
       password,
@@ -52,12 +51,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem("user", JSON.stringify(newUser))
   }
 
-  const logout = (): void => {
+  const logout = () => {
     setUser(null)
     localStorage.removeItem("user")
   }
 
-  const value: AuthContextType = {
+  const value = {
     user,
     isAuthenticated: !!user,
     login,
@@ -68,7 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
-export const useAuth = (): AuthContextType => {
+export const useAuth = () => {
   const context = React.useContext(AuthContext)
   if (context === undefined) {
     throw new Error("useAuth must be used within AuthProvider")

@@ -1,13 +1,11 @@
 "use client";
 
-import type React from "react";
-
 import { useAuth } from "../context/AuthContext";
 import { useEvents } from "../context/EventsContext";
 import { Link } from "react-router-dom";
 import "../styles/events.css";
 
-export const EventList: React.FC = () => {
+export const EventList = () => {
   const { user } = useAuth();
   const { getUserEvents, deleteEvent } = useEvents();
 
@@ -19,7 +17,7 @@ export const EventList: React.FC = () => {
 
   const fullName = user.name.split(" ");
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
       weekday: "short",

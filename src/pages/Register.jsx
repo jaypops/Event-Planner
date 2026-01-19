@@ -1,27 +1,25 @@
 "use client";
 
-import type React from "react";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { registerSchema, type RegisterFormData } from "../schemas/auth";
+import { registerSchema } from "../schemas/auth";
 import "../styles/auth.css";
 import Logo from "../components/Logo";
 
-export const Register: React.FC = () => {
+export const Register = () => {
   const navigate = useNavigate();
   const { register: registerUser } = useAuth();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterFormData>({
+  } = useForm({
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = async (data: RegisterFormData) => {
+  const onSubmit = async (data) => {
     try {
       await registerUser(data.email, data.password, data.name);
       navigate("/events");

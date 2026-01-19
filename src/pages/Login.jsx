@@ -1,27 +1,25 @@
 "use client";
 
-import type React from "react";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { loginSchema, type LoginFormData } from "../schemas/auth";
+import { loginSchema } from "../schemas/auth";
 import "../styles/auth.css";
 
-export const Login: React.FC = () => {
+export const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>({
+  } = useForm({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data) => {
     try {
       await login(data.email, data.password);
       navigate("/events");

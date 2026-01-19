@@ -10,5 +10,3 @@ export const eventSchema = z.object({
   time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Invalid time format"),
   location: z.string().min(3, "Location must be at least 3 characters"),
 })
-
-export type EventFormData = z.infer<typeof eventSchema>

@@ -1,12 +1,11 @@
 "use client"
 
 import React, { createContext, useState, useEffect } from "react"
-import type { EventsContextType, Event } from "../types/event"
 
-export const EventsContext = createContext<EventsContextType | undefined>(undefined)
+export const EventsContext = createContext(undefined)
 
-export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [events, setEvents] = useState<Event[]>([])
+export const EventsProvider = ({ children }) => {
+  const [events, setEvents] = useState([])
 
   useEffect(() => {
     const storedEvents = localStorage.getItem("events")
@@ -19,8 +18,8 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, [])
 
-  const createEvent = (event: Omit<Event, "id" | "createdAt">): void => {
-    const newEvent: Event = {
+  const createEvent = (event) => {
+    const newEvent = {
       ...event,
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
@@ -30,23 +29,23 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     localStorage.setItem("events", JSON.stringify(updatedEvents))
   }
 
-  const updateEvent = (id: string, updates: Partial<Event>): void => {
+  const updateEvent = (id, updates) => {
     const updatedEvents = events.map((event) => (event.id === id ? { ...event, ...updates } : event))
     setEvents(updatedEvents)
     localStorage.setItem("events", JSON.stringify(updatedEvents))
   }
 
-  const deleteEvent = (id: string): void => {
+  const deleteEvent = (id) => {
     const updatedEvents = events.filter((event) => event.id !== id)
     setEvents(updatedEvents)
     localStorage.setItem("events", JSON.stringify(updatedEvents))
   }
 
-  const getUserEvents = (userId: string): Event[] => {
+  const getUserEvents = (userId) => {
     return events.filter((event) => event.userId === userId)
   }
 
-  const value: EventsContextType = {
+  const value = {
     events,
     createEvent,
     updateEvent,
@@ -57,7 +56,7 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   return <EventsContext.Provider value={value}>{children}</EventsContext.Provider>
 }
 
-export const useEvents = (): EventsContextType => {
+export const useEvents = () => {
   const context = React.useContext(EventsContext)
   if (context === undefined) {
     throw new Error("useEvents must be used within EventsProvider")

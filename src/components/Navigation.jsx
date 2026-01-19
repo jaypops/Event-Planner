@@ -1,6 +1,5 @@
 "use client";
 
-import type React from "react";
 import { useState } from "react";
 
 import { Link, useLocation } from "react-router-dom";
@@ -9,7 +8,7 @@ import "../styles/navigation.css";
 import Logo from "./Logo";
 import { LogOut, Menu, X } from "lucide-react";
 
-export const Navigation: React.FC = () => {
+export const Navigation = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const location = useLocation();
   const fullName = user?.name.split(" ");

@@ -1,51 +1,36 @@
-"use client";
+"use client"
 
-import type React from "react";
-
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom"
+import { useAuth } from "../context/AuthContext"
+import { useEvents } from "../context/EventsContext"
+import { eventSchema } from "../schemas/event"
+import "../styles/event-form.css"
 
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
-import { useEvents } from "../context/EventsContext";
-import { eventSchema, type EventFormData } from "../schemas/event";
-import "../styles/event-form.css";
-
-export const EditEvent: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const { events, updateEvent } = useEvents();
+export const CreateEvent = () => {
+  const navigate = useNavigate()
+  const { user } = useAuth()
+  const { createEvent } = useEvents()
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
-  } = useForm<EventFormData>({
+  } = useForm({
     resolver: zodResolver(eventSchema),
-  });
+  })
 
-  const event = events.find((e) => e.id === id);
-
-  useEffect(() => {
-    if (event) {
-      setValue("title", event.title);
-      setValue("description", event.description);
-      setValue("date", event.date.split("T")[0]);
-      setValue("time", event.time);
-      setValue("location", event.location);
-    }
-  }, [event, setValue]);
-
-  if (!event) {
-    return <div className="loading-container">Event not found</div>;
+  if (!user) {
+    return <div className="loading-container">Loading...</div>
   }
 
-  const onSubmit = (data: EventFormData) => {
-    updateEvent(event.id, {
+  const onSubmit = (data) => {
+    createEvent({
       ...data,
-    });
-    navigate("/events");
-  };
+      userId: user.id,
+    })
+    navigate("/events")
+  }
 
   return (
     <div className="form-container">
@@ -85,8 +70,8 @@ export const EditEvent: React.FC = () => {
             </defs>
           </svg>
         </div>
-        <h1>Edit Event</h1>
-        <p className="form-subtitle">Update the details for your event</p>
+        <h1>Create New Event</h1>
+        <p className="form-subtitle">Fill in the details below to create your event</p>
         <form onSubmit={handleSubmit(onSubmit)} className="event-form">
           <div className="form-group">
             <label htmlFor="title">Event Title</label>
@@ -97,9 +82,7 @@ export const EditEvent: React.FC = () => {
               autoComplete="off"
               {...register("title")}
             />
-            {errors.title && (
-              <span className="error">{errors.title.message}</span>
-            )}
+            {errors.title && <span className="error">{errors.title.message}</span>}
           </div>
 
           <div className="form-group">
@@ -110,9 +93,7 @@ export const EditEvent: React.FC = () => {
               rows={4}
               {...register("description")}
             />
-            {errors.description && (
-              <span className="error">{errors.description.message}</span>
-            )}
+            {errors.description && <span className="error">{errors.description.message}</span>}
           </div>
 
           <div className="form-row">
@@ -123,9 +104,7 @@ export const EditEvent: React.FC = () => {
                 type="date"
                 {...register("date")}
               />
-              {errors.date && (
-                <span className="error">{errors.date.message}</span>
-              )}
+              {errors.date && <span className="error">{errors.date.message}</span>}
             </div>
 
             <div className="form-group">
@@ -135,9 +114,7 @@ export const EditEvent: React.FC = () => {
                 type="time"
                 {...register("time")}
               />
-              {errors.time && (
-                <span className="error">{errors.time.message}</span>
-              )}
+              {errors.time && <span className="error">{errors.time.message}</span>}
             </div>
           </div>
 
@@ -150,25 +127,19 @@ export const EditEvent: React.FC = () => {
               autoComplete="street-address"
               {...register("location")}
             />
-            {errors.location && (
-              <span className="error">{errors.location.message}</span>
-            )}
+            {errors.location && <span className="error">{errors.location.message}</span>}
           </div>
 
           <div className="form-actions">
-            <button
-              type="button"
-              onClick={() => navigate("/events")}
-              className="btn btn-secondary"
-            >
+            <button type="button" onClick={() => navigate("/events")} className="btn btn-secondary">
               Cancel
             </button>
             <button type="submit" className="btn btn-primary">
-              Update Event
+              Create Event
             </button>
           </div>
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
