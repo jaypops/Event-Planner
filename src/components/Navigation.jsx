@@ -47,7 +47,7 @@ export const Navigation = () => {
               <div className="navbar-user">
                 <span className="user-name">Welcome, {fullName?.[0]}</span>
                 <button onClick={logout} className="btn btn-secondary btn-sm">
-                 <LogOut /> Logout
+                  <LogOut /> Logout
                 </button>
               </div>
             </>
@@ -70,6 +70,15 @@ export const Navigation = () => {
                 onClick={closeMenu}
               >
                 Register
+              </Link>
+              <Link
+                to="/help"
+                className={`nav-link ${
+                  location.pathname === "/help" ? "active" : ""
+                }`}
+                onClick={closeMenu}
+              >
+                Help?
               </Link>
             </>
           )}

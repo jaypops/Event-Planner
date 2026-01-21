@@ -1,15 +1,16 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import { AuthProvider } from "./context/AuthContext"
-import { EventsProvider } from "./context/EventsContext"
-import { Navigation } from "./components/Navigation"
-import { ProtectedRoute } from "./components/ProtectedRoute"
-import { Home } from "./pages/Home"
-import { Login } from "./pages/Login"
-import { Register } from "./pages/Register"
-import { EventList } from "./pages/EventList"
-import { CreateEvent } from "./pages/CreateEvent"
-import { EditEvent } from "./pages/EditEvent"
-import "./styles/app.css"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { EventsProvider } from "./context/EventsContext";
+import { Navigation } from "./components/Navigation";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { Home } from "./pages/Home";
+import { Login } from "./pages/Login";
+import { Register } from "./pages/Register";
+import { EventList } from "./pages/EventList";
+import { CreateEvent } from "./pages/CreateEvent";
+import { EditEvent } from "./pages/EditEvent";
+import Help from "./pages/Help";
+import "./styles/app.css";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/help" element={<Help />} />
               <Route
                 path="/events"
                 element={
@@ -52,7 +54,7 @@ function App() {
         </EventsProvider>
       </AuthProvider>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
